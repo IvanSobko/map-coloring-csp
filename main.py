@@ -1,6 +1,7 @@
-from csp.problem import Problem
-from csp.solvers import  MinConflictsSolver, RecursiveBacktrackingSolver
 import time
+
+from csp.problem import Problem
+from csp.solvers import MinConflictsSolver, RecursiveBacktrackingSolver
 
 regions = ['BAV', 'BAD', 'SAAR', 'RHINE', 'WEST', 'HES', 'THUR', 'SAX', 'SAXAN', 'LOWSAX', 'HOLS', 'BRAND', 'MECK']
 borders = [('BAV', 'BAD'), ('BAV', 'HES'), ('BAV', 'THUR'), ('BAV', 'SAX'), ('BAD', 'HES'), ('BAD', 'RHINE'),
@@ -11,7 +12,8 @@ borders = [('BAV', 'BAD'), ('BAV', 'HES'), ('BAV', 'THUR'), ('BAV', 'SAX'), ('BA
 
 colors = ["red", "blue", "green", "yellow"]
 
-def check_borderV2(variables, *args):
+
+def check_border(variables, *args):
     zipped = list(zip(variables, args))
     return zipped[0][1] != zipped[1][1]
 
@@ -22,7 +24,7 @@ def solve_csp(solver):
         borders_per_node = [borders[index] for (index, a_tuple) in enumerate(borders) if a_tuple[0] == node]
         if borders_per_node:
             for border in borders_per_node:
-                problem.add_constraint(check_borderV2, list(border))
+                problem.add_constraint(check_border, list(border))
 
     start_time = time.time()
     problem.get_solution()

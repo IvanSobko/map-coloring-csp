@@ -1,7 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 
-from csp.constraint import FunctionConstraint
+from csp.constraint import Constraint
 from csp.variables import Domain
 
 
@@ -21,7 +21,7 @@ class Problem(object):
             self.add_variable(variable, domain)
 
     def add_constraint(self, constraint, variables=None):
-        constraint = FunctionConstraint(constraint)
+        constraint = Constraint(constraint)
         self._constraints.append((constraint, variables))
 
     def plot_map(self, edges):
@@ -56,5 +56,5 @@ class Problem(object):
                 vconstraints[variable].append((constraint, variables))
         for domain in domains.values():
             domain.reset_state()
-        # doArc8(getArcs(domains, constraints), domains, {})
         return domains, constraints, vconstraints
+

@@ -36,11 +36,11 @@ class MinConflictsSolver(Solver):
             for variable in lst:
                 # Check if variable is not in conflict
                 for constraint, variables in vconstraints[variable]:
+                    self.counter = self.counter + 1
                     if not constraint(variables, domains, assignments):
                         break
                 else:
                     continue
-                self.counter = self.counter + 1
                 # Variable has conflicts. Find values with less conflicts.
                 mincount = len(vconstraints[variable])
                 minvalues = []
@@ -48,6 +48,7 @@ class MinConflictsSolver(Solver):
                     assignments[variable] = value
                     count = 0
                     for constraint, variables in vconstraints[variable]:
+                        self.counter = self.counter + 1
                         if not constraint(variables, domains, assignments):
                             count += 1
                     if count == mincount:
@@ -73,7 +74,7 @@ class RecursiveBacktrackingSolver(Solver):
         self._forward_check = forwardcheck
 
     def get_description(self):
-        return "Recursive Backtracking Algorithm"
+        return "Recursive Backtracking Algorithm with Forward check: %s" % self._forward_check
 
     def recursiveBacktracking(self, solutions, domains, vconstraints, assignments, single):
         # Minimum Remaining Values (MRV) heuristics

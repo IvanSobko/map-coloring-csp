@@ -1,4 +1,3 @@
-
 from csp.problem import Problem
 from csp.solvers import  MinConflictsSolver, RecursiveBacktrackingSolver
 import time
@@ -26,12 +25,12 @@ def solve_csp(solver):
                 problem.add_constraint(check_borderV2, list(border))
 
     start_time = time.time()
-    solution = problem.get_solution()
+    problem.get_solution()
     end_time = (time.time() - start_time)
-    print(f"\nSolution with {solver.get_description()}: {solution}.\nSolution took {end_time} sec and {solver.counter} checks")
+    print(f"Solution with {solver.get_description()} took {end_time} sec and {solver.counter} checks")
     problem.plot_map(borders)
 
 if __name__ == "__main__":
-    solvers = [RecursiveBacktrackingSolver(), MinConflictsSolver()]
+    solvers = [RecursiveBacktrackingSolver(forwardcheck=False), RecursiveBacktrackingSolver(forwardcheck=True), MinConflictsSolver()]
     for solver in solvers:
         solve_csp(solver)

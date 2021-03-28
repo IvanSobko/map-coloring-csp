@@ -2,8 +2,19 @@ from csp.variables import Unassigned
 
 
 class Constraint(object):
-    def __call__(self, variables, domains, assignments, forwardcheck=False):
-        return True
+    def __init__(self, func, assigned=True):
+        self._func = func
+        self._assigned = assigned
+
+    def __call__(self, variables, domains, assignments, forwardcheck=False, _unassigned=Unassigned,):
+        parms = [assignments.get(x, _unassigned) for x in variables]
+        missing = parms.count(_unassigned)
+        if missing:
+            return (self._assigned or self._func(variables, *parms)) and (
+                not forwardcheck or
+                self.forward_check(variables, domains, assignments)
+            )
+        return self._func(variables, *parms)
 
     def forward_check(self, variables, domains, assignments, _unassigned=Unassigned):
         unassigned_variable = _unassigned
@@ -27,20 +38,3 @@ class Constraint(object):
                 if not domain:
                     return False
         return True
-
-
-class FunctionConstraint(Constraint):
-    def __init__(self, func, assigned=True):
-        self._func = func
-        self._assigned = assigned
-
-    def __call__(self, variables, domains, assignments, forwardcheck=False, _unassigned=Unassigned,):
-        parms = [assignments.get(x, _unassigned) for x in variables]
-        missing = parms.count(_unassigned)
-        if missing:
-            return (self._assigned or self._func(variables, *parms)) and (
-                not forwardcheck or
-                # missing != 1 or
-                self.forward_check(variables, domains, assignments)
-            )
-        return self._func(variables, *parms)
